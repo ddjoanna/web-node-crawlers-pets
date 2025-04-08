@@ -1,0 +1,40 @@
+{
+  "name": "web-node-crawlers-dogcatstar",
+  "version": "1.0.0",
+  "main": "src/server.mjs",
+  "type": "module",
+  "keywords": [],
+  "author": "ddjoanna",
+  "license": "ISC",
+  "description": "a crawler for dogcatstar product information",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "npx nodemon src/server.mjs",
+    "swagger": "node src/swagger.mjs",
+    "crawl": "node src/modules/jobs/shepherdtech_crawl_products.job.mjs",
+    "extract": "node src/modules/jobs/shepherdtech_product_extract_features.job.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@skorotkiewicz/snowflake-id": "^1.0.1",
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
+    "mysql2": "^3.14.0",
+    "node-input-validator": "^4.5.1",
+    "pg": "^8.14.1",
+    "puppeteer": "^24.6.0",
+    "redis": "^4.7.0",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "sequelize-mock": "^0.10.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
