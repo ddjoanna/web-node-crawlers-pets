@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import config from "../config/index.mjs";
 
-dotenv.config();
+const { JWt } = config;
 
 class Jwt {
-  constructor(secret = process.env.JWT_SECRET) {
-    this.secret = secret;
+  constructor() {
+    this.secret = JWt.secret;
   }
 
   // 生成 JWT

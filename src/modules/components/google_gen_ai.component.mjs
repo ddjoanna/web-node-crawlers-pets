@@ -1,11 +1,14 @@
 import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
+import config from "../config/index.mjs";
+
+const { AI } = config;
 
 // 目前免費版gemini-2.0-flash
 const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  "https://generativelanguage.googleapis.com/v1beta/models/";
+const GEMINI_API_KEY = AI.geminiAiKey;
+const GEMINI_API_GENERATE_CONTENT_MODEL = AI.geminiAiContentModel;
+const GEMINI_API_GENERATE_EMBEDDINGS_MODEL = AI.geminiAiEmbeddingsModel;
 
 class GeminiAi {
   constructor() {
@@ -17,7 +20,7 @@ class GeminiAi {
     return this.retryRequest(async () => {
       try {
         const response = await axios.post(
-          `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+          `${GEMINI_API_URL}${GEMINI_API_GENERATE_CONTENT_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
           {
             contents: [
               {
@@ -42,6 +45,43 @@ class GeminiAi {
           response.data.candidates.length > 0
         ) {
           return response.data.candidates[0].content.parts[0].text;
+        } else {
+          throw new Error("無效的 Gemini API 回應");
+        }
+      } catch (error) {
+        throw error;
+      }
+    });
+  }
+
+  async generateEmbeddings(prompt) {
+    return this.retryRequest(async () => {
+      try {
+        const response = await axios.post(
+          `${GEMINI_API_URL}${GEMINI_API_GENERATE_EMBEDDINGS_MODEL}:embedContent?key=${GEMINI_API_KEY}`,
+          {
+            model: GEMINI_API_GENERATE_EMBEDDINGS_MODEL,
+            content: {
+              parts: [
+                {
+                  text: prompt,
+                },
+              ],
+            },
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (
+          response.data &&
+          response.data.embedding &&
+          Array.isArray(response.data.embedding.values)
+        ) {
+          return response.data.embedding.values;
         } else {
           throw new Error("無效的 Gemini API 回應");
         }

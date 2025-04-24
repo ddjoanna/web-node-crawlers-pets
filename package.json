@@ -13,9 +13,11 @@
     "swagger": "node src/swagger.mjs",
     "crawl": "node src/modules/jobs/shepherdtech_crawl_products.job.mjs",
     "extract": "node src/modules/jobs/shepherdtech_product_extract_features.job.mjs",
+    "embeddings": "node src/modules/jobs/shepherdtech_products_embedding.job.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.18.1",
     "@skorotkiewicz/snowflake-id": "^1.0.1",
     "axios": "^1.8.4",
     "bcrypt": "^5.1.1",

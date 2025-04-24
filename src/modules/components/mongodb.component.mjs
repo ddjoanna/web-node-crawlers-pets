@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
+import config from "../config/index.mjs";
+
+const { MONGO } = config;
 
 class MongoDB {
   async connect() {
     try {
-      await mongoose.connect(process.env.MONGO_URI, {
-        serverSelectionTimeoutMS: 5000,
-        maxPoolSize: 10,
+      await mongoose.connect(MONGO.url, {
+        serverSelectionTimeoutMS: MONGO.timeoutMS,
+        maxPoolSize: MONGO.maxPoolSize,
       });
 
       // 事件監聽

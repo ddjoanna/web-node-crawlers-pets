@@ -1,9 +1,11 @@
 import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
+import config from "../config/index.mjs";
 
-const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4-turbo";
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const { AI } = config;
+
+const OPENAI_API_KEY = AI.openAiKey;
+const OPENAI_GENERATE_CONTENT_MODEL = AI.openAiContentModel;
+const OPENAI_API_GENERATE_EMBEDDINGS_MODEL = AI.geminiAiEmbeddingsModel;
 
 class OpenAI {
   constructor() {
@@ -17,7 +19,7 @@ class OpenAI {
         const response = await axios.post(
           "https://api.openai.com/v1/chat/completions",
           {
-            model: OPENAI_MODEL,
+            model: OPENAI_GENERATE_CONTENT_MODEL,
             messages: [
               {
                 role: "user",
@@ -35,6 +37,30 @@ class OpenAI {
         );
 
         return response.data.choices[0].message.content;
+      } catch (error) {
+        throw error;
+      }
+    });
+  }
+
+  async generateEmbeddings(prompt) {
+    return this.retryRequest(async () => {
+      try {
+        const response = await axios.post(
+          "https://api.openai.com/v1/embeddings",
+          {
+            model: OPENAI_API_GENERATE_EMBEDDINGS_MODEL,
+            input: prompt,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${OPENAI_API_KEY}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        return response.data.data[0].embedding;
       } catch (error) {
         throw error;
       }

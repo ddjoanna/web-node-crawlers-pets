@@ -69,6 +69,67 @@ class Redis {
     }
   }
 
+  async get(key) {
+    try {
+      if (!this.client.isOpen) {
+        await this.connect();
+      }
+      return await this.client.get(key);
+    } catch (error) {
+      console.error(`❌ Error getting value for key ${key}:`, error.message);
+      return null;
+    }
+  }
+
+  async set(key, value, expirySeconds = null) {
+    try {
+      if (!this.client.isOpen) {
+        await this.connect();
+      }
+      if (expirySeconds) {
+        await this.client.set(key, value, { EX: expirySeconds });
+      } else {
+        await this.client.set(key, value);
+      }
+      return true;
+    } catch (error) {
+      console.error(`❌ Error setting value for key ${key}:`, error.message);
+      return false;
+    }
+  }
+
+  async setNx(key, value, expirySeconds) {
+    try {
+      if (!this.client.isOpen) {
+        await this.connect();
+      }
+      const result = await this.client.set(key, value, {
+        NX: true, // Only set if the key does not exist
+        EX: expirySeconds, // Expiry time in seconds
+      });
+      return result === "OK"; // Returns true if the key was set, false otherwise
+    } catch (error) {
+      console.error(
+        `❌ Error setting value for key ${key} with setNx:`,
+        error.message
+      );
+      return false;
+    }
+  }
+
+  async expire(key, expirySeconds) {
+    try {
+      if (!this.client.isOpen) {
+        await this.connect();
+      }
+      await this.client.expire(key, expirySeconds);
+      return true;
+    } catch (error) {
+      console.error(`❌ Error setting expiry for key ${key}:`, error.message);
+      return false;
+    }
+  }
+
   // 關閉 Redis 連接
   async disconnect() {
     try {
