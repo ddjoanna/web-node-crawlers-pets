@@ -1,7 +1,7 @@
 import Product from "../models/mongo/product.model.mjs";
 import redis from "../components/redis.component.mjs";
 import mongoDb from "../components/mongodb.component.mjs";
-import ai from "../components/google_gen_ai.component.mjs";
+import ai from "../services/ai.service.mjs";
 import retryRequest from "../utils/retry.util.mjs";
 
 class ExtractFeaturesWithProduct {
