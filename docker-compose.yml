@@ -1,4 +1,3 @@
-
 services:
   mongodb:
     image: mongo
@@ -8,16 +7,61 @@ services:
       - mongodb_data:/data/db
     networks:
       - pets_network
+
   redis:
     image: redis:7.0.13-alpine3.18
     ports:
-      - "6379:6379"
+      - "6378:6379"  # Map local port 6378 to container port 6379
+    networks:
+      - pets_network
+
+  elasticsearch:
+    image: elasticsearch:8.4.1
+    container_name: elasticsearch-ik
+    user: "1000:1000"
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+      - elasticsearch_plugins:/usr/share/elasticsearch/plugins
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    command: >
+      bash -c "
+      if [ ! -d /usr/share/elasticsearch/plugins/analysis-ik ]; then
+        elasticsearch-plugin install https://get.infini.cloud/elasticsearch/analysis-ik/8.4.1 && \
+        echo 'IK plugin installed';
+      fi;
+      exec elasticsearch
+      "
+    networks:
+      - pets_network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.4.1
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
     networks:
       - pets_network
 
 networks:
   pets_network:
     driver: bridge
+
 volumes:
   mongodb_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  elasticsearch_plugins:
     driver: local
