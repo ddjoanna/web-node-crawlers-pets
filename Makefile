@@ -26,6 +26,10 @@ crawl:
 extract:
 	npm run extract
 
+# 產生商品的向量
+embeddings:
+	npm run embeddings
+
 #========================#
 #== RUN ==#
 #========================#

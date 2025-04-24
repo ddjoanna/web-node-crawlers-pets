@@ -3,13 +3,14 @@
 ## 專案簡介
 
 透過爬蟲技術抓取寵物商品資訊，以牧羊人集團旗下品牌為例
-利用 AI 分析商品特徵，並提供 API 接口讓用戶輸入寵物資訊以取得推薦商品。
+利用 AI 分析商品特徵和生成向量，並提供 API 接口讓用戶輸入寵物資訊以取得推薦商品。
 
 ## 專案目標
 
 1. **爬取商品資訊**：使用爬蟲工具從指定網站抓取商品資料。
 2. **AI 分析商品特徵**：利用 OpenAI 或 Gemini 等 AI 工具對商品描述進行自然語言處理，萃取商品特徵。
-3. **提供 API 接口**：建立 API 供用戶輸入寵物資訊，返回推薦的商品列表。
+3. **AI 取得商品向量**：利用 AI 生成商品向量，並將向量儲存到 Elasticsearch，用於語意相似度查詢。
+4. **提供 API 接口**：建立 API 供用戶輸入寵物資訊，返回推薦的商品列表。
 
 ## 使用技術
 
@@ -28,7 +29,8 @@
    - mongodb 儲存商品資料
 4. 執行 `make crawl` 爬取商品資訊
 5. 執行 `make extract` 萃取商品特徵
-6. 透過 API 接口取得推薦商品
+6. 執行 `make embeddings` 產生商品向量(用於語意相似度查詢)
+7. 透過 API 接口取得推薦商品
    ```shell
    curl --location 'http://localhost:3000/api/products/recommend' \
     --header 'Content-Type: application/json' \
@@ -41,8 +43,8 @@
     "preferences": "零食、愛湊熱鬧"
     }'
    ```
-7. 執行 `make run` 開啟 API 服務
-8. 執行 `make down` 關閉服務 mongodb 和 redis
+8. 執行 `make run` 開啟 API 服務
+9. 執行 `make down` 關閉服務 mongodb 和 redis
 
 ## API Documentation
 
