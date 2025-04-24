@@ -34,7 +34,7 @@ class GenerateProductEmbeddings {
 
         try {
           if (!embeddings) {
-            embeddings = await ai.generateEmbeddings(prompt);
+            embeddings = await ai.generateEmbeddings(prompt, 1536);
           }
 
           console.log(`✅ 商品 ${product.name} 的向量：`, embeddings);

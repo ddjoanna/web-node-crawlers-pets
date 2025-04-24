@@ -16,10 +16,21 @@ class AiService {
     });
   }
 
-  async generateEmbeddings(prompt) {
-    return retryRequest(async () => {
+  async generateEmbeddings(prompt, dims = 1536) {
+    const vector = await retryRequest(async () => {
       return await this.service.generateEmbeddings(prompt);
     });
+
+    return this.fixVectorDim(vector, dims);
+  }
+
+  // 依據OpenAI模型向量長度設定ElasticSearch欄位；ES向量尺寸固定，所以小於1536補0，大於1536則截取
+  fixVectorDim(vector, dims) {
+    if (!Array.isArray(vector)) return Array(dims).fill(0);
+    if (vector.length > dims) return vector.slice(0, dims);
+    if (vector.length < dims)
+      return vector.concat(Array(dims - vector.length).fill(0));
+    return vector;
   }
 }
 
