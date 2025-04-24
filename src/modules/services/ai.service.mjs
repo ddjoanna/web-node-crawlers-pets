@@ -10,16 +10,16 @@ class AiService {
     this.service = provider === "gemini" ? gemini_ai : open_ai;
   }
 
-  async generateContent(prompt) {
+  async generateContent(prompt, retry = 1) {
     return retryRequest(async () => {
       return await this.service.generateContent(prompt);
-    });
+    }, retry);
   }
 
-  async generateEmbeddings(prompt, dims = 1536) {
+  async generateEmbeddings(prompt, dims = 1536, retry = 1) {
     const vector = await retryRequest(async () => {
       return await this.service.generateEmbeddings(prompt);
-    });
+    }, retry);
 
     return this.fixVectorDim(vector, dims);
   }

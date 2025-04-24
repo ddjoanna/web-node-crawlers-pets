@@ -38,7 +38,7 @@ class ExtractFeaturesWithProduct {
 
         try {
           extractedFeatures = await retryRequest(async () => {
-            const response = await ai.generateContent(prompt);
+            const response = await ai.generateContent(prompt, 3);
             const jsonString = response.replace(/`|json/gi, "");
             return JSON.parse(jsonString);
           });

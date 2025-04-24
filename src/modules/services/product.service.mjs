@@ -42,7 +42,7 @@ class ProductService {
 
   async extractedEmbeddings(info) {
     try {
-      return ai.generateEmbeddings(info, 1536);
+      return ai.generateEmbeddings(info, 1536, 1);
     } catch (error) {
       console.error(`❌ 生成商品向量失敗：${error.message}`);
     }
@@ -61,7 +61,7 @@ class ProductService {
       `;
 
       return await retryRequest(async () => {
-        const response = await ai.generateContent(prompt);
+        const response = await ai.generateContent(prompt, 1);
         const jsonString = response.replace(/`|json/gi, "");
         return JSON.parse(jsonString);
       });
