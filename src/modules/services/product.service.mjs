@@ -42,7 +42,7 @@ class ProductService {
 
   async extractedEmbeddings(info) {
     try {
-      return ai.generateEmbeddings(info, 1536, 1);
+      return ai.generateEmbeddings(info, 1);
     } catch (error) {
       console.error(`❌ 生成商品向量失敗：${error.message}`);
     }

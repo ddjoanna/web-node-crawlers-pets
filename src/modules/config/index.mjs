@@ -43,6 +43,7 @@ const AI = {
 
 const ELASTICSEARCH = {
   url: process.env.ELASTICSEARCH_URL,
+  products_vector_dim: process.env.ELASTICSEARCH_PRODUCT_VECTOR_DIM || 768,
 };
 
 export default {

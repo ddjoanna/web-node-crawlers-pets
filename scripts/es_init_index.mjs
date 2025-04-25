@@ -1,4 +1,7 @@
 import { Client } from "@elastic/elasticsearch";
+import config from "../src/modules/config/index.mjs";
+
+const { ELASTICSEARCH } = config;
 
 const esClient = new Client({ node: "http://localhost:9200" });
 
@@ -66,7 +69,7 @@ async function initIndex(indexName, aliasName) {
             image: { type: "keyword" },
             vector: {
               type: "dense_vector",
-              dims: 1536,
+              dims: ELASTICSEARCH.products_vector_dim,
             },
           },
         },
