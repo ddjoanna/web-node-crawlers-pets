@@ -29,8 +29,9 @@
    - mongodb 儲存商品資料
 4. 執行 `make crawl` 爬取商品資訊
 5. 執行 `make extract` 萃取商品特徵
-6. 執行 `make embeddings` 產生商品向量(用於語意相似度查詢)
-7. 透過 API 接口取得推薦商品
+6. 執行 `make init_es` 建立 Elasticsearch 索引
+7. 執行 `make embeddings` 產生商品向量儲存至 Elasticsearch(用於語意相似度查詢)
+8. 透過 API 接口取得推薦商品
    ```shell
    curl --location 'http://localhost:3000/api/products/recommend' \
     --header 'Content-Type: application/json' \
@@ -43,12 +44,13 @@
     "preferences": "零食、愛湊熱鬧"
     }'
    ```
-8. 執行 `make run` 開啟 API 服務
-9. 執行 `make down` 關閉服務 mongodb 和 redis
+9. 執行 `make run` 開啟 API 服務
+10. 執行 `make down` 關閉服務 mongodb 和 redis
 
 ## API Documentation
 
-[Swagger JSON](swagger.json)
+- [Swagger JSON](swagger.json)
+- [Postman Collection](web-node-crawlers-pets.postman_collection.json)
 
 ## Note
 

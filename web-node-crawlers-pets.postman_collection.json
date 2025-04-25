@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "5df7d53a-177a-4bc0-a70f-0c5e2883d668",
+		"name": "web-node-crawlers-pets",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43014149"
+	},
+	"item": [
+		{
+			"name": "ElasticSearch",
+			"item": [
+				{
+					"name": "基本資訊與狀態",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9200/",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "插件列表",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9200/_cat/plugins?v",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_cat",
+								"plugins"
+							],
+							"query": [
+								{
+									"key": "v",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "建立索引",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "User-Agent",
+								"value": "-t"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"settings\": {\n    \"analysis\": {\n      \"analyzer\": {\n        \"custom_ik_max_word\": {\n          \"type\": \"custom\",\n          \"tokenizer\": \"ik_max_word\",\n          \"filter\": [\n            \"stopword_filter\",\n            \"extra_stopword_filter\"\n          ]\n        },\n        \"custom_ik_smart\": {\n          \"type\": \"custom\",\n          \"tokenizer\": \"ik_smart\",\n          \"filter\": [\n            \"stopword_filter\",\n            \"extra_stopword_filter\"\n          ]\n        }\n      },\n      \"filter\": {\n        \"stopword_filter\": {\n          \"type\": \"stop\",\n          \"stopwords\": [\"的\", \"了\", \"和\", \"是\"]\n        },\n        \"extra_stopword_filter\": {\n          \"type\": \"stop\",\n          \"stopwords\": [\"某些\", \"其他\"]\n        }\n      }\n    }\n  },\n  \"mappings\": {\n    \"properties\": {\n      \"brand\": { \"type\": \"keyword\" },\n      \"id\": { \"type\": \"keyword\" },\n      \"name\": {\n        \"type\": \"text\",\n        \"analyzer\": \"custom_ik_max_word\",\n        \"search_analyzer\": \"custom_ik_smart\"\n      },\n      \"description\": {\n        \"type\": \"text\",\n        \"analyzer\": \"custom_ik_max_word\",\n        \"search_analyzer\": \"custom_ik_smart\"\n      },\n      \"category\": { \"type\": \"keyword\" },\n      \"tags\": { \"type\": \"keyword\" },\n      \"purpose\": { \"type\": \"keyword\" },\n      \"flavor\": { \"type\": \"keyword\" },\n      \"form\": { \"type\": \"keyword\" },\n      \"species\": { \"type\": \"keyword\" },\n      \"createdAt\": { \"type\": \"date\" },\n      \"updatedAt\": { \"type\": \"date\" },\n      \"url\": { \"type\": \"keyword\" },\n      \"image\": { \"type\": \"keyword\" },\n      \"vector\": {\n        \"type\": \"dense_vector\",\n        \"dims\": 1536\n      }\n    }\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/products_v250425",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"products_v250425"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得索引",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "User-Agent",
+								"value": "-t"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "localhost:9200/_cat/indices",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_cat",
+								"indices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除索引",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9200/products_v250424_v2",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"products_v250424_v2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "設定索引別名",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"actions\": [\n        {\n            \"add\": {\n                \"index\": \"products_v250424\",\n                \"alias\": \"products\"\n            }\n        }\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9200/_aliases",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_aliases"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "將舊索引資料重新導入新索引",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"source\": {\n        \"index\": \"products_v250424\"\n    },\n    \"dest\": {\n        \"index\": \"products_v250425\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9200/_reindex",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_reindex"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "特徵商品推薦",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"species\": \"狗\",\n    \"breed\": \"台灣土狗\",\n    \"age\": 14,\n    \"weight\": 16,\n    \"health\": \"關節老化、視力退化\",\n    \"preferences\": \"零食、愛湊熱鬧\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/products/recommend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"products",
+						"recommend"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

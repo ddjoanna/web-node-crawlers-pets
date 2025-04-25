@@ -30,6 +30,9 @@ extract:
 embeddings:
 	npm run embeddings
 
+init_es:
+	npm run init_es
+
 #========================#
 #== RUN ==#
 #========================#
